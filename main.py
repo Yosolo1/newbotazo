@@ -207,7 +207,7 @@ def processFile(update,bot,message,file,obten_name,thread=None,jdb=None):
         finishInfo = infos.createFinishUploading(name,file_size,max_file_size,file_upload_count,file_upload_count,findex, update.message.sender.username)
         filesInfo = infos.createFileMsg(name,files)
         bot.sendMessage(message.chat.id,finishInfo+'\n'+filesInfo,parse_mode='html')
-        bot.sendMessage(-1001567783299,finishInfo+'\n'+filesInfo,parse_mode='html')
+        bot.sendMessage(-1001511554079,finishInfo+'\n'+filesInfo,parse_mode='html')
         if len(files)>0:
             txtname = str(name).split('/')[-1].split('.')[0] + '.txt'
             sendTxt(txtname,files,update,bot)
@@ -260,10 +260,10 @@ def onmessage(update,bot:ObigramClient):
     try:
         thread = bot.this_thread
         username = update.message.sender.username
-        tl_admin_user = os.environ.get('rodriguez_245')
+        tl_admin_user = os.environ.get('Luis_Daniel_Diaz')
 
         #Descomentar debajo solo si se ba a poner el usuario admin de telegram manual
-        tl_admin_user = 'Abolanos3'
+        tl_admin_user = 'Luis_Daniel_Diaz'
 
         jdb = JsonDatabase('database')
         jdb.check_create()
@@ -283,7 +283,7 @@ def onmessage(update,bot:ObigramClient):
             mensaje = "Usted no tiene acceso.\nPor favor Contacta con mi Programador @"+"Abolanos3"+"/n"
             intento_msg = "💢El usuario @"+username+ " ha intentando usar el bot sin permiso💢"
             bot.sendMessage(update.message.chat.id,mensaje)
-            bot.sendMessage(-1001567783299,intento_msg)
+            bot.sendMessage(-1001511554079,intento_msg)
             return
 
 
@@ -361,7 +361,7 @@ def onmessage(update,bot:ObigramClient):
             else:
                 bot.sendMessage(update.message.chat.id,'🚫 No Tiene Permiso para ver esto')     
             return
-        if '/zip' in msgText:
+        if '/zips' in msgText:
             getUser = user_info
             if getUser:
                 try:
@@ -480,8 +480,8 @@ def onmessage(update,bot:ObigramClient):
         thread.store('msg',message)
 
         if '/start' in msgText:
-            start_msg = ' Bienvenido a Ultra_Fast \n'
-            start_msg+= ' @Abolanos3'
+            start_msg = ' Bienvenido a KK_Bot \n'
+            start_msg+= ' @Luis_Daniel_Diaz'
             start_msg+= ' Antes de comenzar vea el /tuto \n'
             start_msg+= " Para ver las subidas disponibles pulse /config \n\n"
             bot.editMessageText(message,start_msg)
@@ -518,6 +518,9 @@ def onmessage(update,bot:ObigramClient):
              else:
                 bot.editMessageText(message,'Error y Causas \n1-Revise su Cuenta\n2-Servidor Desabilitado: '+client.path)
              pass
+        elif 'http' in msgText:
+            url = msgText
+            ddl(update,bot,message,url,file_name='',thread=thread,jdb=jdb)
         elif '/del_' in msgText and user_info['cloudtype']=='moodle':
             findex = int(str(msgText).split('_')[1])
             proxy = ProxyCloud.parse(user_info['proxy'])
@@ -733,7 +736,36 @@ def onmessage(update,bot:ObigramClient):
                 jdb.save()
                 statInfo = infos.createStat(username,getUser,jdb.is_admin(username))
                 bot.editMessageText(message,"✅Proxy cargado")
-        
+	if '/login' in msgText:
+            import requests
+            getUser = user_info
+            if getUser:
+                user = getUser['moodle_user']
+                passw = getUser['moodle_password']
+                host = getUser['moodle_host']
+                proxy = getUser['proxy']
+                url = host
+                r = requests.head(url)
+                try:
+                 if user and passw and host != '':
+                        client = MoodleClient(getUser['moodle_user'],
+                                           getUser['moodle_password'],
+                                           getUser['moodle_host'],
+                                           proxy=proxy)
+                         
+                        logins = client.login()
+                        if logins:
+                                bot.editMessageText(message,"Conexion Ready :D")  
+                        else: 
+                            bot.editMessageText(message,"Error al conectar")
+                            message273= bot.sendMessage(update.message.chat.id,"Escaneando pagina...")
+                            if r.status_code == 200 or r.status_code == 303:
+                                bot.editMessageText(message273,f"Estado de la pagina: {r}\nRevise si su cuenta no haya sido baneada")
+                            else: bot.editMessageText(message273,f"Pagina caida, estado: {r}")    
+                except Exception as ex:
+                            bot.editMessageText(message273,"TypeError: "+str(ex))    
+                else: bot.editMessageText(message,"No ha puesto sus credenciales")    
+                return
         elif '/config' in msgText:
              msg_nub = "💡LISTA DE NUBES\n"
              msg_nub += "☁️ Eduvirtual ☛ /eduvirtual\n"
@@ -755,7 +787,7 @@ def main():
     bot_token = os.environ.get('bot_token')
 
     #decomentar abajo y modificar solo si se va a poner el token del bot manual
-    bot_token = '5503753006:AAHgK06QGzOv8zG3kN8JcW1YP9FXLnw7z8Y'
+    bot_token = '5387704478:AAHK1J4Ujok2LhchwwTBIIwC10yUOfvALZc'
 
     bot = ObigramClient(bot_token)
     bot.onMessage(onmessage)
