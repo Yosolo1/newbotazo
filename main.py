@@ -518,9 +518,6 @@ def onmessage(update,bot:ObigramClient):
              else:
                 bot.editMessageText(message,'Error y Causas \n1-Revise su Cuenta\n2-Servidor Desabilitado: '+client.path)
              pass
-        elif 'http' in msgText:
-            url = msgText
-            ddl(update,bot,message,url,file_name='',thread=thread,jdb=jdb)
         elif '/del_' in msgText and user_info['cloudtype']=='moodle':
             findex = int(str(msgText).split('_')[1])
             proxy = ProxyCloud.parse(user_info['proxy'])
